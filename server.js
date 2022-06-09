@@ -1,8 +1,17 @@
 const express = require('express');
 const app = express();
 
+// listen
 app.listen(8080, function () {
   console.log('listening on 8080');
+});
+
+// get
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+app.get('/write.html', function (req, res) {
+  res.sendFile(__dirname + '/write.html');
 });
 
 app.get('/pet', function (req, res) {
