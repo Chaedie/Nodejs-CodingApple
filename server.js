@@ -35,10 +35,17 @@ app.get('/list', (req, res) => {
     });
 });
 
-// 4. Post To Do
+// 4. post post_idx
+
+// 5. Post To Do
 app.post('/add', (req, res) => {
-  db.collection('post').insertOne(
-    { 할일: req.body.title, 날짜: req.body.date },
-    () => console.log('저장 완료')
-  );
+  db.collection('counter').findOne({ name: '게시물 개수' }, (error, result) => {
+    console.log(result.totalPost);
+    let totalPost = result.totalPost;
+
+    db.collection('post').insertOne(
+      { _idx: totalPost + 1, toDo: req.body.toDo, date: req.body.date },
+      () => console.log('저장 완료')
+    );
+  });
 });
