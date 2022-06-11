@@ -45,7 +45,18 @@ app.post('/add', (req, res) => {
 
     db.collection('post').insertOne(
       { _idx: totalPost + 1, toDo: req.body.toDo, date: req.body.date },
-      () => console.log('저장 완료')
+      () => {
+        console.log('저장 완료');
+        db.collection('counter').updateOne(
+          { name: '게시물 개수' },
+          { $inc: { totalPost: 1 } },
+          (error, result) => {
+            if (error) {
+              return console.log(error);
+            }
+          }
+        );
+      }
     );
   });
 });
