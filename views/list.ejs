@@ -60,10 +60,40 @@
     </nav>
     <!-- main -->
     <main>
-      <% for (let i = 0; i < posts.length; i++) { %>
-      <p4>할일 제목 : <%= posts[i].할일 %></p4>
+      <!-- <% for (let i = 0; i < posts.length; i++) { %>
+      <h4>할일 제목 : <%= posts[i].할일 %></h4>
       <p>할일 마감날짜 : <%= posts[i].날짜 %></p>
-      <% } %> %>
+      <button name="">삭제</button>
+      <% } %> -->
+      <h4 class="ml-2 my-3">서버에서 가져온 할일 리스트</h4>
+      <ul class="list-group">
+        <% for (let i = 0; i < posts.length; i++) { %>
+        <li class="list-group-item">
+          <h4>할일 제목 : <%= posts[i].toDo %></h4>
+          <p>할일 마감날짜 : <%= posts[i].date %></p>
+          <button class="delete" data-id="<%= posts[i]._idx %>">삭제</button>
+        </li>
+        <% } %>
+      </ul>
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script>
+        $('.delete').click(function (e) {
+          var 글번호 = e.target.dataset.id;
+          var 지금누른거 = $(this);
+          $.ajax({
+            method: 'DELETE',
+            url: '/delete',
+            data: { _idx: 글번호 },
+          })
+            .done(function (결과) {
+              console.log('성공했어요');
+              지금누른거.parent('li').fadeOut();
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+              console.log(xhr, textStatus, errorThrown);
+            });
+        });
+      </script>
     </main>
 
     <!-- js -->
@@ -78,5 +108,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="/server.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   </body>
 </html>
