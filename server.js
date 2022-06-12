@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+app.use('/public', express.static('public'));
 
 const mongDbUrl = process.env.MONGODB_URL;
 const MongoClient = require('mongodb').MongoClient;
@@ -21,10 +22,11 @@ MongoClient.connect(mongDbUrl, { useUnifiedTopology: true }, (에러, client) =>
 });
 
 // 1. Get Index.html
-app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
+app.get('/', (req, res) => res.render('index.ejs'));
 
 // 2. Get Write page
-app.get('/write', (req, res) => res.sendFile(__dirname + '/write.html'));
+app.get('');
+app.get('/write', (req, res) => res.render('write.ejs'));
 
 // 3. Get List page
 app.get('/list', (req, res) => {
@@ -69,4 +71,15 @@ app.delete('/delete', function (req, res) {
     console.log('삭제완료');
     res.status(200).send({ message: '성공했습니다.' });
   });
+});
+
+// 7. Get Detail pages
+app.get('/detail/:id', function (req, res) {
+  db.collection('post').findOne(
+    { _idx: parseInt(req.params.id) },
+    function (error, result) {
+      console.log(result);
+      res.render('detail.ejs', { data: result });
+    }
+  );
 });

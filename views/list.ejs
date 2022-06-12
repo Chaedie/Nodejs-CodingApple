@@ -13,53 +13,13 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/public/style.css" />
     <title>NodeJS CRUD!!!!!</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">채디's 함께 자라기</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="write">Write</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
-        </div>
-      </div>
-    </nav>
+    <%- include('nav.html') %>
     <!-- main -->
-    <main>
+    <main class="container">
       <!-- <% for (let i = 0; i < posts.length; i++) { %>
       <h4>할일 제목 : <%= posts[i].할일 %></h4>
       <p>할일 마감날짜 : <%= posts[i].날짜 %></p>
@@ -71,7 +31,9 @@
         <li class="list-group-item">
           <h4>할일 제목 : <%= posts[i].toDo %></h4>
           <p>할일 마감날짜 : <%= posts[i].date %></p>
-          <button class="delete" data-id="<%= posts[i]._idx %>">삭제</button>
+          <button class="delete btn btn-danger" data-id="<%= posts[i]._idx %>">
+            삭제
+          </button>
         </li>
         <% } %>
       </ul>
