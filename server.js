@@ -3,13 +3,17 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+
 app.use('/public', express.static('public'));
+
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
+app.set('view engine', 'ejs');
 
 const mongDbUrl = process.env.MONGODB_URL;
 const MongoClient = require('mongodb').MongoClient;
 let db;
-
-app.set('view engine', 'ejs');
 
 // 0. DB Connection
 MongoClient.connect(mongDbUrl, { useUnifiedTopology: true }, (에러, client) => {
@@ -21,14 +25,15 @@ MongoClient.connect(mongDbUrl, { useUnifiedTopology: true }, (에러, client) =>
   app.listen(8080, () => console.log('listening on 8080'));
 });
 
-// 1. Get Index.html
+// 1. Get Page
+// 1.1. Get Index.html
 app.get('/', (req, res) => res.render('index.ejs'));
 
-// 2. Get Write page
+// 1.2. Get Write page
 app.get('');
 app.get('/write', (req, res) => res.render('write.ejs'));
 
-// 3. Get List page
+// 1.3. Get List page
 app.get('/list', (req, res) => {
   db.collection('post')
     .find()
@@ -37,9 +42,32 @@ app.get('/list', (req, res) => {
     });
 });
 
-// 4. post post_idx
+// 1.4. Get Detail pages
+app.get('/detail/:id', function (req, res) {
+  db.collection('post').findOne(
+    { _idx: parseInt(req.params.id) },
+    function (error, result) {
+      console.log(result);
+      res.render('detail.ejs', { data: result });
+    }
+  );
+});
 
-// 5. Post To Do
+// 1.5. Get Edit page
+app.get('/edit/:id', (req, res) => {
+  db.collection('post').findOne(
+    { _idx: parseInt(req.params.id) },
+    (error, result) => {
+      console.log(result);
+      res.render('edit.ejs', { post: result });
+    }
+  );
+});
+
+// 2. Post
+// 2.1. post post_idx
+
+// 2.2 Post To Do
 app.post('/add', (req, res) => {
   db.collection('counter').findOne({ name: '게시물 개수' }, (error, result) => {
     console.log(result.totalPost);
@@ -63,7 +91,21 @@ app.post('/add', (req, res) => {
   });
 });
 
-// 6. Delete
+// 3.Put
+// 3.1. Put post
+app.put('/edit', (req, res) => {
+  db.collection('post').updateOne(
+    { _idx: parseInt(req.body.id) },
+    { $set: { toDO: req.body.toDo, date: req.body.date } },
+    (error, result) => {
+      console.log('수정완료');
+      res.redirect('/list');
+    }
+  );
+});
+
+// 5. Delete
+// 5.1. Delete post
 app.delete('/delete', function (req, res) {
   console.log(req.body);
   req.body._idx = parseInt(req.body._idx);
@@ -71,15 +113,4 @@ app.delete('/delete', function (req, res) {
     console.log('삭제완료');
     res.status(200).send({ message: '성공했습니다.' });
   });
-});
-
-// 7. Get Detail pages
-app.get('/detail/:id', function (req, res) {
-  db.collection('post').findOne(
-    { _idx: parseInt(req.params.id) },
-    function (error, result) {
-      console.log(result);
-      res.render('detail.ejs', { data: result });
-    }
-  );
 });
