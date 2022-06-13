@@ -9,14 +9,26 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
+
     <link rel="stylesheet" href="/public/style.css" />
+
     <title>NodeJS CRUD!!!!!</title>
   </head>
   <body>
     <%- include('nav.html') %>
     <!-- main -->
-    <main>
-      <h1>홈페이지입니다~!</h1>
+    <main class="container">
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <label for="toDo">ID</label>
+          <input type="text" class="form-control" aria-describedby="emailHelp" name="id" />
+        </div>
+        <div class="form-group">
+          <label for="dueDate">Password</label>
+          <input type="text" class="form-control" name="pw" />
+        </div>
+        <button type="submit" class="btn btn-danger">Submit</button>
+      </form>
     </main>
     <!-- js -->
     <script
